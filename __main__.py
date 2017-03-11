@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import security, ftp
 import os
 from pprint import pprint
