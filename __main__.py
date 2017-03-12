@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 import security, ftp
-import os
+import sys, os, subprocess
 from pprint import pprint
-import sys
 
 argumetns = sys.argv
 if len(argumetns) != 2 :
-	print("pull or push arguments expected")
+	print("pull, push or update arguments expected")
+	quit()
+
+if argumetns[1] == 'update' :
+	os.execv('./update.sh', [''])
 	quit()
 
 ftps, loc = security.connect()
