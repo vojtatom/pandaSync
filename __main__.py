@@ -9,7 +9,8 @@ if len(argumetns) != 2 :
 	quit()
 
 if argumetns[1] == 'update' :
-	os.execv('./update.sh', [''])
+	update = os.path.join(os.path.dirname(os.path.abspath(__file__)), "update.sh")
+	os.execv(update, [''])
 	quit()
 
 ftps, loc = security.connect()

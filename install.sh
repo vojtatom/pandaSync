@@ -39,7 +39,6 @@ echo "Creating link..."
 ln -s "$DIR/__main__.py" "$install_link"
 if [ "$?" = "1" ]; then
 	echo "Cannot create link." 1>&2
-	rm -r "$install_path"
 	exit 1
 fi
 
