@@ -9,7 +9,7 @@ class col:
 	arrow = '\033[96m>\033[0m'
 
 def get_list(ftps) :
-	path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".tmp.json")
+	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), ".tmp.json")
 	try :
 		ftps.download("/.ftplist.json", path)
 		with open('.tmp.json', 'r') as file :
@@ -24,7 +24,7 @@ def get_list(ftps) :
 		return {}
 
 def upload_list(database, ftps) :
-	path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".tmp.json")
+	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), ".tmp.json")
 	try :
 		with open('.tmp.json', 'w') as file :
 			file.write(json.dumps(database))
