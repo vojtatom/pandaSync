@@ -64,7 +64,7 @@ def compare(src, dst, src_dat, dst_dat) :
 			if dst_dat[path] >= src_dat[file] :
 				src_dat[file] = [ False, src_dat[file]]
 			else :
-				print('local', dst_dat[path], 'web', src_dat[file])
+				# print('local', dst_dat[path], 'web', src_dat[file])
 				src_dat[file] = [ True, src_dat[file]]
 				log = log + col.plus + " {}\n".format(path)
 				changes += 1

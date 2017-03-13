@@ -1,11 +1,22 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import security, ftp
 import sys, os, subprocess
 from pprint import pprint
 
 argumetns = sys.argv
 if len(argumetns) != 2 :
-	print("pull, push or update arguments expected")
+	print("	panda pull	- downloads newer content of from the server")
+	print("	panda push	- uploads content of the local")
+	print("	panda update	- updates pandaSync")
+	print("	panda reset	- deletes saved creditals from the local disk")
+	quit()
+
+if argumetns[1] == 'reset' :
+	try :
+		os.remove(os.path.join(os.path.dirname(os.path.realpath(__file__)), ".creditals"))
+		print(ftp.col.plus, 'creditals deleted')
+	except :
+		print(ftp.col.minus, 'no save creditals found.')
 	quit()
 
 if argumetns[1] == 'update' :

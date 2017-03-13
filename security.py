@@ -5,7 +5,7 @@ import Crypto.Random.OSRNG.posix as defiv
 import json
 from getpass import getpass
 import os
-import ftp
+from ftp import col, create_path
 
 
 def conv_bytes(val) :
@@ -48,7 +48,7 @@ def remove_padd(data, padding) :
 
 
 def get_data(iv, data, padding) :
-	key = getpass(ftp.col.arrow + " key: ")
+	key = getpass(col.arrow + " key: ")
 	while len(key) < 32 :
 		key = key + key
 	key = key[:32]
@@ -62,8 +62,8 @@ def login(creditals) :
 	try :
 		data = get_data(iv, data, padding)
 	except :
-		print(ftp.col.minus, 'key not valid')
-		return None
+		print(col.minus, 'key not valid')
+		return None, None
 
 	data = json.loads(data)
 	name, passwd, server, loc = data['name'], data['passwd'], data['server'], data['loc']
@@ -71,19 +71,31 @@ def login(creditals) :
 	try :
 		ftps = ftputil.FTPHost(server, name, passwd)
 	except :
-		print(ftp.col.minus, 'cannot connect, check settings')
-		return None
+		print(col.minus, 'cannot connect, check also the settings of the server')
+		return None, None
 
 	return ftps, loc
 
 
 def get_creditals() :
 	iv = os.urandom(16)
-	server = input("{} server: ".format(ftp.col.arrow))
-	name = input("{} name: ".format(ftp.col.arrow))
-	passwd = getpass("{} passwd: ".format(ftp.col.arrow))
-	key = getpass("{} key: ".format(ftp.col.arrow))
-	loc = input("{} location: ".format(ftp.col.arrow))
+	server = input("{} server: ".format(col.arrow))
+	name = input("{} name: ".format(col.arrow))
+	passwd = getpass("{} passwd: ".format(col.arrow))
+	key = getpass("{} key: ".format(col.arrow))
+	loc = input("{} location: ".format(col.arrow))
+
+	loc = os.path.realpath(os.path.expanduser(loc))
+
+	if not os.path.exists(loc):
+		print(col.minus, loc, 'does not exist.')
+		agree = input("{} do you want to create it? [y/n]: ".format(col.arrow))
+		if agree in ['y', 'Y', 'yes', "Yes", 'agree', 'a', 'A'] :
+			create_path(os.path.join(loc, 'here'))
+		else :
+			return None, None
+	else :
+		print(col.plus, 'Setting path to ', loc)
 
 	pt = json.dumps({ 'name' : name, 'passwd' : passwd, 'server' : server, 'loc' : loc })
 
@@ -96,7 +108,10 @@ def get_creditals() :
 	data = es.encrypt(bytes(pt))
 
 	creditals = { 'data' : data, 'iv' : iv, 'padd' : padding }
-	save_creditals(creditals)
+	try :
+		save_creditals(creditals)
+	except :
+		print(col.minus, 'could not save the creditals on the disk.')
 	return creditals
 
 
@@ -104,10 +119,11 @@ def connect():
 	try:
 		creditals = load_creaditals()
 	except :
-		print(ftp.col.minus, "login unknown - please type in your creditals:")
+		print(col.minus, "login unknown - please type in your creditals:")
 		creditals = get_creditals()
 	try :
 		ftps, loc = login(creditals)
 	except:
 		ftps, loc = None, None
 	return ftps, loc
+
