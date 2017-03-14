@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 import security, ftp
 import sys, os, subprocess
-from pprint import pprint
 
 argumetns = sys.argv
 if len(argumetns) != 2 :
-	print("	panda pull	- downloads newer content of from the server")
+	print("	panda pull	- downloads newer content from the server")
 	print("	panda push	- uploads content of the local")
 	print("	panda update	- updates pandaSync")
 	print("	panda reset	- deletes saved creditals from the local disk")

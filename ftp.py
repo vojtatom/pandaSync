@@ -1,8 +1,6 @@
-from ftplib import FTP_TLS
 import ftputil
 import json
 import os
-import pprint
 
 class col:
 	minus = '\033[91m-\033[0m'

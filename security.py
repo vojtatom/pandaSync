@@ -1,4 +1,3 @@
-# from ftplib import FTP
 import ftputil
 from Crypto.Cipher import AES
 import Crypto.Random.OSRNG.posix as defiv
@@ -17,7 +16,8 @@ def conv_int(val) :
 
 
 def load_creaditals() :
-	with open('.creditals', 'rb') as file :
+	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '.creditals')
+	with open(path, 'rb') as file :
 		length = conv_int(file.read(32))
 		data = file.read(length)
 		length = conv_int(file.read(32))
@@ -81,8 +81,8 @@ def get_creditals() :
 	iv = os.urandom(16)
 	server = input("{} server: ".format(col.arrow))
 	name = input("{} name: ".format(col.arrow))
-	passwd = getpass("{} passwd: ".format(col.arrow))
-	key = getpass("{} key: ".format(col.arrow))
+	passwd = getpass("{} server passwd: ".format(col.arrow))
+	key = getpass("{} my local encryption key: ".format(col.arrow))
 	loc = input("{} location: ".format(col.arrow))
 
 	loc = os.path.realpath(os.path.expanduser(loc))
@@ -110,6 +110,7 @@ def get_creditals() :
 	creditals = { 'data' : data, 'iv' : iv, 'padd' : padding }
 	try :
 		save_creditals(creditals)
+		print(col.plus, 'creditals saved locally - you\'ll be prompted to enter the key again for login.')
 	except :
 		print(col.minus, 'could not save the creditals on the disk.')
 	return creditals
