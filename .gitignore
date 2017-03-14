@@ -1,2 +1,3 @@
 .creditals
 /__pycache__/
+*.pyc

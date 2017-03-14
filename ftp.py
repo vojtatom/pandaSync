@@ -2,6 +2,7 @@ from ftplib import FTP_TLS
 import ftputil
 import json
 import os
+import pprint
 
 class col:
 	minus = '\033[91m-\033[0m'
@@ -9,11 +10,12 @@ class col:
 	arrow = '\033[96m>\033[0m'
 
 def get_list(ftps) :
-	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), ".tmp.json")
+	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'tmp')
 	try :
-		ftps.download("/.ftplist.json", path)
-		with open('.tmp.json', 'r') as file :
-			database = json.loads(file.read())	
+		ftps.download("/panda.json", path)
+		with open(path, 'r') as file :
+			database = file.read()
+		database = json.loads(database)
 		os.remove(path)
 		return database
 	except :
@@ -24,11 +26,11 @@ def get_list(ftps) :
 		return {}
 
 def upload_list(database, ftps) :
-	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), ".tmp.json")
+	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmp")
 	try :
-		with open('.tmp.json', 'w') as file :
+		with open('tmp', 'w') as file :
 			file.write(json.dumps(database))
-		ftps.upload(path, "/.ftplist.json")
+		ftps.upload(path, "/panda.json")
 		os.remove(path)
 	except :
 		try :
@@ -49,13 +51,16 @@ def explore(database, dic, inter=os) :
 		else :
 			database[f] = inter.path.getmtime(f)
 
+	if inter is not os :
+		upload_list(database, inter)
+
 
 def compare(src, dst, src_dat, dst_dat) :
 	src_len = len(src)
 	changes = 0
 	log = ""
 	for file in src_dat :
-		if os.path.basename(file) in ('.DS_Store', '.ftplist.json') :
+		if os.path.basename(file) in ('.DS_Store', 'panda.json') :
 			src_dat[file] = [ False, src_dat[file]]
 			continue
 
@@ -75,7 +80,7 @@ def compare(src, dst, src_dat, dst_dat) :
 
 	dst_len = len(dst)
 	for file in dst_dat :
-		if os.path.basename(file) in ('.DS_Store', '.ftplist.json') :
+		if os.path.basename(file) in ('.DS_Store', 'panda.json') :
 			dst_dat[file] = [ False, dst_dat[file]]
 			continue
 
