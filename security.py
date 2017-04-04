@@ -16,7 +16,7 @@ def conv_int(val) :
 
 
 def load_creaditals(account_name) :
-	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'logins/.creditals-' + account_name)
+	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'logins/.credentials-' + account_name)
 	with open(path, 'rb') as file :
 		length = conv_int(file.read(32))
 		data = file.read(length)
@@ -27,8 +27,8 @@ def load_creaditals(account_name) :
 	return { 'data' : data, 'iv' : iv, 'padd' : padd }
 
 
-def save_creditals(data, account_name) :
-	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'logins/.creditals-' + account_name)
+def save_credentials(data, account_name) :
+	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'logins/.credentials-' + account_name)
 	with open(path, 'wb') as file :
 		file.write(conv_bytes(len(data['data'])))
 		file.write(data['data'])
@@ -58,8 +58,8 @@ def get_data(iv, data, padding) :
 	return data
 
 
-def login(creditals) :
-	iv, data, padding = creditals['iv'], creditals['data'], creditals['padd']
+def login(credentials) :
+	iv, data, padding = credentials['iv'], credentials['data'], credentials['padd']
 	try :
 		data = get_data(iv, data, padding)
 	except :
@@ -78,7 +78,7 @@ def login(creditals) :
 	return ftps, loc
 
 
-def get_creditals(account_name) :
+def get_credentials(account_name) :
 	iv = os.urandom(16)
 	server = input("{} server: ".format(col.arrow))
 	name = input("{} name: ".format(col.arrow))
@@ -110,23 +110,23 @@ def get_creditals(account_name) :
 	es = AES.new(key, AES.MODE_CBC, iv)
 	data = es.encrypt(bytes(pt))
 
-	creditals = { 'data' : data, 'iv' : iv, 'padd' : padding }
+	credentials = { 'data' : data, 'iv' : iv, 'padd' : padding }
 	try :
-		save_creditals(creditals, account_name)
-		print(col.plus, 'creditals saved locally - you\'ll be prompted to enter the key again for login.')
+		save_credentials(credentials, account_name)
+		print(col.plus, 'credentials saved locally - you\'ll be prompted to enter the key again for login.')
 	except :
-		print(col.minus, 'could not save the creditals on the disk.')
-	return creditals
+		print(col.minus, 'could not save the credentials on the disk.')
+	return credentials
 
 
 def connect(account_name):
 	try:
-		creditals = load_creaditals(account_name)
+		credentials = load_creaditals(account_name)
 	except :
-		print(col.minus, "login unknown - please type in your creditals:")
-		creditals = get_creditals(account_name)
+		print(col.minus, "login unknown - please type in your credentials:")
+		credentials = get_credentials(account_name)
 	try :
-		ftps, loc = login(creditals)
+		ftps, loc = login(credentials)
 	except:
 		ftps, loc = None, None
 	return ftps, loc

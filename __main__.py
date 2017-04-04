@@ -9,15 +9,15 @@ if (len(argumetns) == 2 and argumetns[1] != 'update') or \
 	print("	panda pull <name>      - downloads newer content from the server")
 	print("	panda push <name>      - uploads content of the local")
 	print("	panda update	       - updates pandaSync")
-	print("	panda reset <name>     - deletes saved creditals from the local disk")
+	print("	panda reset <name>     - deletes saved credentials from the local disk")
 	quit()
 
 if argumetns[1] == 'reset' :
 	try :
-		os.remove(os.path.join(os.path.dirname(os.path.realpath(__file__)), ".creditals-" + argumetns[2] ))
-		print(ftp.col.plus, 'creditals deleted')
+		os.remove(os.path.join(os.path.dirname(os.path.realpath(__file__)), "logins/.credentials-" + argumetns[2] ))
+		print(ftp.col.plus, 'credentials deleted')
 	except :
-		print(ftp.col.minus, 'no save creditals found.')
+		print(ftp.col.minus, 'no save credentials found.')
 	quit()
 
 if argumetns[1] == 'update' :
