@@ -16,7 +16,7 @@ def conv_int(val) :
 
 
 def load_creaditals(account_name) :
-	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '/logins/.creditals-' + account_name)
+	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'logins/.creditals-' + account_name)
 	with open(path, 'rb') as file :
 		length = conv_int(file.read(32))
 		data = file.read(length)
@@ -28,7 +28,7 @@ def load_creaditals(account_name) :
 
 
 def save_creditals(data, account_name) :
-	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '/logins/.creditals-' + account_name)
+	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'logins/.creditals-' + account_name)
 	with open(path, 'wb') as file :
 		file.write(conv_bytes(len(data['data'])))
 		file.write(data['data'])

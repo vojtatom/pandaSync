@@ -1,3 +1,4 @@
 logins/*
+!logins/.gitkeep
 /__pycache__/
 *.pyc
