@@ -28,12 +28,12 @@ git clone https://github.com/vojtatom/pandaSync
 After downloading, move the new pandasync folder to the directory where you want it to live. Enter the directory and run the **install.sh** script - it'll create symlink for you, so you can run the command by simply typing **panda**.
 
 ```
-cd ~/Applictaions/pandasync
+cd ~/Applications/pandasync
 sudo ./install.sh
 ```
 
 ### How to run
-After creating the symlink with **install.sh**, jut simply type **panda** and you should get some sort of help message in your terminal.
+After creating the symlink with **install.sh**, just simply type **panda** and you should get some sort of help message in your terminal.
 
 ```
 panda
@@ -41,12 +41,12 @@ panda
 ...and if you do, that means the script has ben installed successfully! Yay, congrats!
 
 ## Functionality
-You can always get a list of possibilities by typing **panda** - it'll roll out the full help screen. Currently there are four commands panda can run:
+You can always get a list of possibilities by typing **panda** - it'll roll out the full help screen. Currently there are four commands panda can run (replace <name> with your own local name for your account):
 ```
-panda pull		- downloads newer content of from the server
-panda push		- uploads content of the local
-panda update	- updates pandaSync
-panda reset		- deletes saved creditals from the local disk
+panda pull <name>   - downloads newer content of from the server
+panda push <name>   - uploads content of the local
+panda update        - updates pandaSync
+panda reset <name>  - deletes saved creditals from the local disk
 ```
 
 Your creditals and password are stored on your local drive in **.creditals** file. It's encrypted using the AES from pycrypto package. The only thing you have to remeber is the **key** which is the encryption key to your locally stored file. This allows easier authentication for you next time, when you only fill your local key.

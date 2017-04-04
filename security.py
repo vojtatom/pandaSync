@@ -15,8 +15,8 @@ def conv_int(val) :
 	return int.from_bytes(val, byteorder='little')
 
 
-def load_creaditals() :
-	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '.creditals')
+def load_creaditals(account_name) :
+	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '/logins/.creditals-' + account_name)
 	with open(path, 'rb') as file :
 		length = conv_int(file.read(32))
 		data = file.read(length)
@@ -27,8 +27,9 @@ def load_creaditals() :
 	return { 'data' : data, 'iv' : iv, 'padd' : padd }
 
 
-def save_creditals(data) :
-	with open('.creditals', 'wb') as file :
+def save_creditals(data, account_name) :
+	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '/logins/.creditals-' + account_name)
+	with open(path, 'wb') as file :
 		file.write(conv_bytes(len(data['data'])))
 		file.write(data['data'])
 		file.write(conv_bytes(len(data['iv'])))
@@ -77,7 +78,7 @@ def login(creditals) :
 	return ftps, loc
 
 
-def get_creditals() :
+def get_creditals(account_name) :
 	iv = os.urandom(16)
 	server = input("{} server: ".format(col.arrow))
 	name = input("{} name: ".format(col.arrow))
@@ -87,13 +88,15 @@ def get_creditals() :
 
 	loc = os.path.realpath(os.path.expanduser(loc))
 
-	if not os.path.exists(loc):
+	while not os.path.exists(loc):
 		print(col.minus, loc, 'does not exist.')
 		agree = input("{} do you want to create it? [y/n]: ".format(col.arrow))
 		if agree in ['y', 'Y', 'yes', "Yes", 'agree', 'a', 'A'] :
 			create_path(os.path.join(loc, 'here'))
 		else :
-			return None, None
+			loc = input("{} location: ".format(col.arrow))
+			loc = os.path.realpath(os.path.expanduser(loc))
+			
 	else :
 		print(col.plus, 'Setting path to ', loc)
 
@@ -109,19 +112,19 @@ def get_creditals() :
 
 	creditals = { 'data' : data, 'iv' : iv, 'padd' : padding }
 	try :
-		save_creditals(creditals)
+		save_creditals(creditals, account_name)
 		print(col.plus, 'creditals saved locally - you\'ll be prompted to enter the key again for login.')
 	except :
 		print(col.minus, 'could not save the creditals on the disk.')
 	return creditals
 
 
-def connect():
+def connect(account_name):
 	try:
-		creditals = load_creaditals()
+		creditals = load_creaditals(account_name)
 	except :
 		print(col.minus, "login unknown - please type in your creditals:")
-		creditals = get_creditals()
+		creditals = get_creditals(account_name)
 	try :
 		ftps, loc = login(creditals)
 	except:
