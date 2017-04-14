@@ -1,6 +1,7 @@
 import ftputil
 import json
 import os
+from time import sleep
 
 class col:
 	minus = '\033[91m-\033[0m'
@@ -29,14 +30,17 @@ def upload_list(database, ftps) :
 		with open('tmp', 'w') as file :
 			file.write(json.dumps(database))
 			file.close()
+		print(col.arrow, 'updating database...')
+		sleep(1)
 		ftps.upload(path, "/panda.json")
 		os.remove(path)
+		print(col.plus, 'database updated')
 	except :
 		try :
 			os.remove(path)
 		except :
 			pass
-		print(col.arrow, 'database not updated')
+		print(col.minus, 'database not updated')
 
 
 def explore(database, dic, inter=os) :
