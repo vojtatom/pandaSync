@@ -27,11 +27,10 @@ def get_list(ftps) :
 def upload_list(database, ftps) :
 	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'tmp')
 	try :
-		with open('tmp', 'w') as file :
+		with open(path, 'w') as file :
 			file.write(json.dumps(database))
 			file.close()
 		print(col.arrow, 'updating database...')
-		sleep(1)
 		ftps.upload(path, "/panda.json")
 		os.remove(path)
 		print(col.plus, 'database updated')
