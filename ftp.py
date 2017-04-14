@@ -24,10 +24,11 @@ def get_list(ftps) :
 		return {}
 
 def upload_list(database, ftps) :
-	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmp")
+	path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'tmp')
 	try :
 		with open('tmp', 'w') as file :
 			file.write(json.dumps(database))
+			file.close()
 		ftps.upload(path, "/panda.json")
 		os.remove(path)
 	except :
