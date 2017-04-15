@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import security, ftp
-import sys, os, subprocess
+import sys, os, subprocess, platform
 
 argumetns = sys.argv
 if (len(argumetns) == 2 and argumetns[1] != 'update') or \
@@ -21,9 +21,14 @@ if argumetns[1] == 'reset' :
 	quit()
 
 if argumetns[1] == 'update' :
-	update = os.path.join(os.path.dirname(os.path.realpath(__file__)), "update.sh")
-	os.execv(update, [''])
-	quit()
+	if platform.system() != 'Windows' :
+		update = os.path.join(os.path.dirname(os.path.realpath(__file__)), "update.sh")
+		os.execv(update, [''])
+		quit()
+	else :
+		update = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'update.bat')
+		subprocess.call([update])
+		quit()
 
 ftps, loc = security.connect(argumetns[2])
 if ftps is None :
